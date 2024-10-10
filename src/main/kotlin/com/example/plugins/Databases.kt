@@ -5,15 +5,23 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.sql.*
 import kotlinx.coroutines.*
+import java.sql.*
 
 fun Application.configureDatabases() {
     val dbConnection: Connection = connectToPostgres(embedded = true)
     val cityService = CityService(dbConnection)
-    
+    val loginService = LoginService(dbConnection)
+
     routing {
-    
+
+        /*// Create User
+        post("/user") {
+            val user = call.receive<LoginRequest>()
+            val id = loginService.createUser(user)
+            call.respond(HttpStatusCode.Created, id)
+        }*/
+
         // Create city
         post("/cities") {
             val city = call.receive<City>()
@@ -75,9 +83,10 @@ fun Application.connectToPostgres(embedded: Boolean): Connection {
     if (embedded) {
         return DriverManager.getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "root", "")
     } else {
-        val url = environment.config.property("postgres.url").getString()
-        val user = environment.config.property("postgres.user").getString()
-        val password = environment.config.property("postgres.password").getString()
+//        val url = environment.config.property("postgres.url").getString()
+        val url = environment.config.property("DATABASE_URL").getString()
+        val user = environment.config.property("postgres").getString()
+        val password = environment.config.property("password").getString()
 
         return DriverManager.getConnection(url, user, password)
     }
