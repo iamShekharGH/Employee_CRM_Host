@@ -11,7 +11,7 @@ import java.sql.*
 fun Application.configureDatabases() {
     val dbConnection: Connection = connectToPostgres(embedded = true)
     val cityService = CityService(dbConnection)
-    val loginService = LoginService(dbConnection)
+    val loginService = UserInfoService(dbConnection)
 
     routing {
 

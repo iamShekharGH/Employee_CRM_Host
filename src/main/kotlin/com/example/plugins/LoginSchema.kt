@@ -1,111 +1,118 @@
 package com.example.plugins
 
-import com.example.model.EmployeeGender
-import com.example.model.UserInformation
+import com.example.model.Login
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.sql.Connection
 import java.sql.Statement
 
-
 class LoginService(private val connection: Connection) {
 
     companion object {
-        private const val CREATE_TABLE_USERS =
-            "CREATE TABLE users (\n" +
-                    "    id INT PRIMARY KEY AUTO_INCREMENT,\n" +
-                    "    name VARCHAR(255),\n" +
-                    "    title VARCHAR(255),\n" +
-                    "    email VARCHAR(255),\n" +
-                    "    age INT,\n" +
-                    "    birthday DATE,\n" +
-                    "    photo_url TEXT,\n" +
-                    "    salary BIGINT,\n" +
-                    "    employee_gender VARCHAR(10),\n" +
-                    "    present_today BOOLEAN,\n" +
-                    "    salary_credited BOOLEAN\n" +
-                    ");"
-        private const val SELECT_USER_BY_ID = "SELECT id, name, title, email, age, birthday, photo_url, salary, employee_gender, present_today, salary_credited FROM users WHERE id = ?"
-        private const val INSERT_USER = "INSERT INTO users (name, title, email, age, birthday, photo_url, salary, employee_gender, present_today, salary_credited) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        private const val UPDATE_USER = "UPDATE users SET name = ?, title = ?, email = ?, age = ?, birthday = ?, photo_url = ?, salary = ?, employee_gender = ?, present_today = ?, salary_credited = ? WHERE id = ?"
-        private const val DELETE_USER = "DELETE FROM users WHERE id = ?"
-
+        private const val CREATE_TABLE_LOGINS =
+            "CREATE TABLE login (" +
+                    "id INT PRIMARY KEY REFERENCES users(id), " +
+                    "username VARCHAR(255), " +
+                    "password VARCHAR(255), " +
+                    "authToken VARCHAR(255);"
+        private const val SELECT_LOGIN_BY_ID_AND_PASSWORD = "SELECT * FROM login WHERE id = ? AND password = ?"
+        private const val INSERT_LOGIN = "INSERT INTO login (username, password, authToken) VALUES (?, ?, ?)"
+        private const val UPDATE_LOGIN = "UPDATE login SET username = ?, password = ?, authToken = ? WHERE id = ?"
+        private const val DELETE_LOGIN = "DELETE FROM login WHERE id = ?"
+        private const val INSERT_RANDOM_LOGINS = """
+            INSERT INTO login (username, password, authToken) VALUES 
+            ('ravi.kumar', 'password123', 'token1'),
+            ('anita.sharma', 'password123', 'token2'),
+            ('suresh.rao', 'password123', 'token3'),
+            ('deepika.nair', 'password123', 'token4'),
+            ('vijay.singh', 'password123', 'token5'),
+            ('neha.joshi', 'password123', 'token6'),
+            ('aman.gupta', 'password123', 'token7'),
+            ('priya.iyer', 'password123', 'token8'),
+            ('rahul.verma', 'password123', 'token9'),
+            ('anjali.patil', 'password123', 'token10'),
+            ('rajesh.kumar', 'password123', 'token11'),
+            ('kavita.mehta', 'password123', 'token12'),
+            ('harish.rao', 'password123', 'token13'),
+            ('pooja.shah', 'password123', 'token14'),
+            ('manoj.desai', 'password123', 'token15'),
+            ('rina.gupta', 'password123', 'token16'),
+            ('kiran.naik', 'password123', 'token17'),
+            ('sneha.chatterjee', 'password123', 'token18'),
+            ('arjun.patel', 'password123', 'token19'),
+            ('sangeeta.kumari', 'password123', 'token20'),
+            ('vikram.sharma', 'password123', 'token21'),
+            ('divya.anand', 'password123', 'token22'),
+            ('rohit.jain', 'password123', 'token23'),
+            ('megha.reddy', 'password123', 'token24'),
+            ('akhil.menon', 'password123', 'token25'),
+            ('nidhi.verma', 'password123', 'token26'),
+            ('siddharth.singh', 'password123', 'token27'),
+            ('komal.desai', 'password123', 'token28'),
+            ('ajay.bansal', 'password123', 'token29'),
+            ('geeta.rao', 'password123', 'token30');
+        """
     }
 
     init {
         val statement = connection.createStatement()
-        statement.executeUpdate(CREATE_TABLE_USERS)
+        statement.executeUpdate(CREATE_TABLE_LOGINS)
     }
 
-    suspend fun createUser(user: UserInformation): Int = withContext(Dispatchers.IO) {
-        val statement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)
-        statement.setString(1, user.name)
-        statement.setString(2, user.title)
-        statement.setString(3, user.email)
-        statement.setInt(4, user.age)
-        statement.setDate(5, java.sql.Date.valueOf(user.birthday))
-        statement.setString(6, user.photoUrl)
-        statement.setLong(7, user.salary)
-        statement.setString(8, user.employeeGender.name)
-        statement.setBoolean(9, user.presentToday)
-        statement.setBoolean(10, user.salaryCredited)
+    // Function to insert random logins
+    suspend fun insertRandomLogins() = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(INSERT_RANDOM_LOGINS)
+        statement.executeUpdate()
+    }
+
+    // Function to create a new login entry
+    suspend fun create(login: Login): Int = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(INSERT_LOGIN, Statement.RETURN_GENERATED_KEYS)
+        statement.setString(1, login.username)
+        statement.setString(2, login.password)
+        statement.setString(3, login.authToken)
         statement.executeUpdate()
 
         val generatedKeys = statement.generatedKeys
         if (generatedKeys.next()) {
             return@withContext generatedKeys.getInt(1)
         } else {
-            throw Exception("Unable to retrieve the id of the newly inserted user")
+            throw Exception("Unable to retrieve the id of the newly inserted login")
         }
     }
 
-    // Read a user
-    suspend fun readUser(id: Int): UserInformation = withContext(Dispatchers.IO) {
-        val statement = connection.prepareStatement(SELECT_USER_BY_ID)
+    // Function to read a login entry by id and password
+    suspend fun read(id: Int, password: String): Login = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(SELECT_LOGIN_BY_ID_AND_PASSWORD)
         statement.setInt(1, id)
+        statement.setString(2, password)
         val resultSet = statement.executeQuery()
 
         if (resultSet.next()) {
-            return@withContext UserInformation(
-                eid = resultSet.getInt("id"),
-                name = resultSet.getString("name"),
-                title = resultSet.getString("title"),
-                email = resultSet.getString("email"),
-                age = resultSet.getInt("age"),
-                birthday = resultSet.getDate("birthday").toString(),
-                photoUrl = resultSet.getString("photo_url"),
-                salary = resultSet.getLong("salary"),
-                employeeGender = EmployeeGender.valueOf(resultSet.getString("employee_gender")),
-                presentToday = resultSet.getBoolean("present_today"),
-                salaryCredited = resultSet.getBoolean("salary_credited")
-            )
+            val username = resultSet.getString("username")
+            val authToken = resultSet.getString("authToken")
+            return@withContext Login(id, username, password, authToken)
         } else {
             throw Exception("Record not found")
         }
     }
 
-    // Update a user
-    suspend fun updateUser(id: Int, user: UserInformation) = withContext(Dispatchers.IO) {
-        val statement = connection.prepareStatement(UPDATE_USER)
-        statement.setString(1, user.name)
-        statement.setString(2, user.title)
-        statement.setString(3, user.email)
-        statement.setInt(4, user.age)
-        statement.setDate(5, java.sql.Date.valueOf(user.birthday))
-        statement.setString(6, user.photoUrl)
-        statement.setLong(7, user.salary)
-        statement.setString(8, user.employeeGender.name)
-        statement.setBoolean(9, user.presentToday)
-        statement.setBoolean(10, user.salaryCredited)
-        statement.setInt(11, id)
+    // Function to update a login entry
+    suspend fun update(id: Int, login: Login) = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(UPDATE_LOGIN)
+        statement.setString(1, login.username)
+        statement.setString(2, login.password)
+        statement.setString(3, login.authToken)
+        statement.setInt(4, id)
         statement.executeUpdate()
     }
 
-    // Delete a user
-    suspend fun deleteUser(id: Int) = withContext(Dispatchers.IO) {
-        val statement = connection.prepareStatement(DELETE_USER)
+    // Function to delete a login entry
+    suspend fun delete(id: Int) = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(DELETE_LOGIN)
         statement.setInt(1, id)
         statement.executeUpdate()
     }
+
 
 }
