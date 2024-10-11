@@ -1,4 +1,4 @@
-package com.example.plugins
+package com.example.plugins.tables
 
 import com.example.model.Employee
 import com.example.model.Gender
@@ -7,12 +7,12 @@ import kotlinx.coroutines.withContext
 import java.sql.Connection
 import java.sql.Statement
 
-class EmployeeSchema(private val connection: Connection) {
+class EmployeeService(private val connection: Connection) {
 
     companion object {
 
         private const val CREATE_TABLE_EMPLOYEES =
-            "CREATE TABLE employees (" +
+            "CREATE TABLE IF NOT EXISTS employees (" +
                     "eid SERIAL PRIMARY KEY, " +
                     "name VARCHAR(255), " +
                     "gender VARCHAR(10), " +
