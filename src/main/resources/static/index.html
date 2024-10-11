@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ktor Application Routes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .button-container {
+            margin: 20px;
+        }
+        .button-container button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .button-container p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+<h1>Welcome to Ktor Application</h1>
+
+<div class="button-container">
+    <button onclick="navigateTo('/test')">Test Route</button>
+    <p>Hits the `/test` endpoint.</p>
+
+    <button onclick="navigateTo('/generateLoginUsers')">Generate Login Users</button>
+    <p>Hits the `/generateLoginUsers` endpoint.</p>
+
+    <button onclick="navigateTo('/showLoginUsers')">Show Login Users</button>
+    <p>Hits the `/showLoginUsers` endpoint.</p>
+
+    <button onclick="navigateTo('/generateUserInformation')">Generate User Information</button>
+    <p>Hits the `/generateUserInformation` endpoint.</p>
+
+    <button onclick="navigateTo('/generateUserInfoCheck')">Generate User Info Check</button>
+    <p>Hits the `/generateUserInfoCheck` endpoint.</p>
+
+    <button onclick="navigateTo('/generateEmployee')">Generate Employee</button>
+    <p>Hits the `/generateEmployee` endpoint.</p>
+
+    <button onclick="navigateTo('/generateAll')">Generate All</button>
+    <p>Hits the `/generateAll` endpoint.</p>
+
+    <button onclick="navigateTo('/login')">Login</button>
+    <p>Hits the `/login` endpoint.</p>
+
+    <button onclick="navigateTo('/cities')">Create City</button>
+    <p>Hits the `/cities` endpoint.</p>
+
+    <button onclick="navigateTo('/1234')">Dance Floor</button>
+    <p>Hits the `/1234` endpoint.</p>
+
+    <button onclick="navigateTo('/reqisres')">Request and Response</button>
+    <p>Hits the `/reqisres` endpoint.</p>
+</div>
+
+<script>
+    function navigateTo(route) {
+        // Change the window location to navigate to the specified route
+        window.location.href = route;
+    }
+</script>
+</body>
+</html>
