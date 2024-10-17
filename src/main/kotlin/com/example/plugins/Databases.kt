@@ -1,5 +1,8 @@
 package com.example.plugins
 
+import com.example.employee.handleEmployeeFiles
+import com.example.model.Employee
+import com.example.model.EmployeeResponse
 import com.example.model.Login
 import com.example.model.Success
 import com.example.model.UserInformation
@@ -29,7 +32,6 @@ fun Application.configureDatabases() {
     routing {
 
         get("/test") {
-            loginService.checkTableStatus()
             call.respondText("Hello World!")
         }
 
@@ -66,7 +68,7 @@ fun Application.configureDatabases() {
             val res = userInfoService.insertRandomUsers()
             call.respond(HttpStatusCode.OK, res)
         }
-        get("/generateUserInfoCheck") {
+        get("/showUserInformation") {
             val res = userInfoService.getAllUsers()
             if (res.isEmpty()) {
                 call.respond(
@@ -92,6 +94,21 @@ fun Application.configureDatabases() {
             val res = employeeService.insertRandomEmployees()
             call.respond(HttpStatusCode.OK, res)
         }
+
+        get("/showEmployee") {
+            val res = employeeService.getAllEmployees()
+            if (res.isEmpty()) {
+                call.respond(
+                    HttpStatusCode.NotFound,
+                    emptyList<Employee>()
+                )
+            } else {
+                call.respond(
+                    HttpStatusCode.OK, EmployeeResponse(HttpStatusCode.OK.value, res)
+                )
+            }
+        }
+
         get("/generateAll") {
             loginService.insertRandomLogins()
             userInfoService.insertRandomUsers()
@@ -100,6 +117,10 @@ fun Application.configureDatabases() {
 
         post("/login") {
             call.handleLogin(loginService, userInfoService)
+        }
+
+        get("/employees") {
+            call.handleEmployeeFiles(loginService, employeeService)
         }
 
         // Create city

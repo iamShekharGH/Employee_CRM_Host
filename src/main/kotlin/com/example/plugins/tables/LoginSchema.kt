@@ -30,6 +30,8 @@ class LoginService(private val connection: Connection) {
         private const val UPDATE_LOGIN = "UPDATE login SET username = ?, password = ?, authToken = ? WHERE id = ?"
         private const val DELETE_LOGIN = "DELETE FROM login WHERE id = ?"
 
+        private const val SELECT_LOGIN_BY_TOKEN = "SELECT * FROM login WHERE authToken = ?"
+
         private const val INSERT_RANDOM_LOGINS = """
         INSERT INTO login (id, username, password, authToken) VALUES 
         (1, 'ravi.kumar', 'password123', 'token1'),
@@ -210,5 +212,22 @@ class LoginService(private val connection: Connection) {
             println("ID: $id, Username: $username, Password: $password, AuthToken: $authToken")
         }
     }
+
+
+    suspend fun hasUserByToken(authToken: String): Login? = withContext(Dispatchers.IO) {
+        val statement = connection.prepareStatement(SELECT_LOGIN_BY_TOKEN)
+        statement.setString(1, authToken)
+        val resultSet = statement.executeQuery()
+
+        return@withContext if (resultSet.next()) {
+            val id = resultSet.getInt("id")
+            val username = resultSet.getString("username")
+            val password = resultSet.getString("password")
+            Login(id, username, password, authToken)
+        } else {
+            null
+        }
+    }
+
 
 }

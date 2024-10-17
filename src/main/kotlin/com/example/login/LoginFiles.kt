@@ -33,8 +33,8 @@ suspend fun ApplicationCall.handleLogin(loginService: LoginService, userInfoServ
         val userInfo = getUser(userInfoService, loginUser.id)
 
 
-        val response = LoginResponse(token, userInfo)
-        respond(HttpStatusCode.OK, jsonConfig.encodeToString(LoginResponse.serializer(), response))
+        val response = LoginResponse(status = HttpStatusCode.OK.value, authKey = token, data = userInfo)
+        respond(HttpStatusCode.OK, response)
     }
 }
 

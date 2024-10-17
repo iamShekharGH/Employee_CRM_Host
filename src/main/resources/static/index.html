@@ -7,60 +7,150 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+        }
+        .title {
+            margin-top: 20px;
+            cursor: pointer;
+            color: #4CAF50;
+            text-decoration: none;
         }
         .button-container {
             margin: 20px;
         }
-        .button-container button {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-            max-width: 300px;
+        .button-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .button-row p {
+            width: 50%;
+            text-align: center;
         }
         .button-container p {
-            margin: 5px 0;
-            font-size: 0.9em;
-            color: gray;
+            margin: 10px 0 5px;
+            font-size: 1em;
+            color: #666;
         }
+        .button-container button {
+            display: block;
+            padding: 10px;
+            width: 100%;
+            max-width: 140px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .button-container button:hover {
+            transform: scale(1.05);
+        }
+        .test-route { background-color: #4CAF50; }
+        .generate-login-users { background-color: #2196F3; }
+        .show-login-users { background-color: #FF9800; }
+        .generate-user-information { background-color: #9C27B0; }
+        .show-user-information { background-color: #4CAF50; }
+        .generate-user-info-check { background-color: #673AB7; }
+        .generate-employee { background-color: #e91e63; }
+        .show-employee { background-color: #2196F3; }
+        .generate-all { background-color: #00bcd4; }
+        .login { background-color: #795548; }
+        .create-city { background-color: #8bc34a; }
+        .dance-floor { background-color: #f44336; }
+        .request-response { background-color: #3f51b5; }
+        .cities-read { background-color: #FF9800; }
+        .cities-update { background-color: #9C27B0; }
+        .cities-delete { background-color: #673AB7; }
     </style>
 </head>
 <body>
-<h1>Welcome to Ktor Application</h1>
+<a href="/" class="title"><h1>Employee CRM Backend</h1></a>
+<div class="container">
+    <h1>Welcome to Ktor Application</h1>
 
-<div class="button-container">
-    <button onclick="navigateTo('/test')">Test Route</button>
-    <p>Hits the `/test` endpoint.</p>
+    <div class="button-container">
+        <p>Hits the <strong>/test</strong> endpoint.</p>
+        <button class="test-route" onclick="navigateTo('/test')">Test Route</button>
 
-    <button onclick="navigateTo('/generateLoginUsers')">Generate Login Users</button>
-    <p>Hits the `/generateLoginUsers` endpoint.</p>
+        <div class="button-row">
+            <p>Hits the <strong>/generateLoginUsers</strong> endpoint.</p>
+            <p>Hits the <strong>/showLoginUsers</strong> endpoint.</p>
+        </div>
+        <div class="button-row">
+            <button class="generate-login-users" onclick="navigateTo('/generateLoginUsers')">Generate Login Users
+            </button>
+            <button class="show-login-users" onclick="navigateTo('/showLoginUsers')">Show Login Users</button>
+        </div>
 
-    <button onclick="navigateTo('/showLoginUsers')">Show Login Users</button>
-    <p>Hits the `/showLoginUsers` endpoint.</p>
+        <div class="button-row">
+            <p>Hits the <strong>/generateUserInformation</strong> endpoint.</p>
+            <p>Hits the <strong>/showUserInformation</strong> endpoint.</p>
+        </div>
+        <div class="button-row">
+            <button class="generate-user-information" onclick="navigateTo('/generateUserInformation')">Generate User
+                Information
+            </button>
+            <button class="show-user-information" onclick="navigateTo('/showUserInformation')">Show User Information
+            </button>
+        </div>
 
-    <button onclick="navigateTo('/generateUserInformation')">Generate User Information</button>
-    <p>Hits the `/generateUserInformation` endpoint.</p>
+        <p>Hits the <strong>/generateUserInfoCheck</strong> endpoint.</p>
+        <button class="generate-user-info-check" onclick="navigateTo('/generateUserInfoCheck')">Generate User Info Check
+        </button>
 
-    <button onclick="navigateTo('/generateUserInfoCheck')">Generate User Info Check</button>
-    <p>Hits the `/generateUserInfoCheck` endpoint.</p>
+        <div class="button-row">
+            <p>Hits the <strong>/generateEmployee</strong> endpoint.</p>
+            <p>Hits the <strong>/showEmployee</strong> endpoint.</p>
+        </div>
+        <div class="button-row">
+            <button class="generate-employee" onclick="navigateTo('/generateEmployee')">Generate Employee</button>
+            <button class="show-employee" onclick="navigateTo('/showEmployee')">Show Employee</button>
+        </div>
 
-    <button onclick="navigateTo('/generateEmployee')">Generate Employee</button>
-    <p>Hits the `/generateEmployee` endpoint.</p>
+        <p>Hits the <strong>/generateAll</strong> endpoint.</p>
+        <button class="generate-all" onclick="navigateTo('/generateAll')">Generate All</button>
 
-    <button onclick="navigateTo('/generateAll')">Generate All</button>
-    <p>Hits the `/generateAll` endpoint.</p>
+        <p>Hits the <strong>/login</strong> endpoint.</p>
+        <button class="login" onclick="navigateTo('/login')">Login</button>
 
-    <button onclick="navigateTo('/login')">Login</button>
-    <p>Hits the `/login` endpoint.</p>
+        <p>Hits the <strong>/cities</strong> endpoint.</p>
+        <button class="create-city" onclick="navigateTo('/cities')">Create City</button>
 
-    <button onclick="navigateTo('/cities')">Create City</button>
-    <p>Hits the `/cities` endpoint.</p>
+        <p>Hits the <strong>/1234</strong> endpoint.</p>
+        <button class="dance-floor" onclick="navigateTo('/1234')">Dance Floor</button>
 
-    <button onclick="navigateTo('/1234')">Dance Floor</button>
-    <p>Hits the `/1234` endpoint.</p>
+        <p>Hits the <strong>/reqisres</strong> endpoint.</p>
+        <button class="request-response" onclick="navigateTo('/reqisres')">Request and Response</button>
 
-    <button onclick="navigateTo('/reqisres')">Request and Response</button>
-    <p>Hits the `/reqisres` endpoint.</p>
+        <div class="button-row">
+            <p>Hits the <strong>/cities/{id}</strong> endpoint for GET.</p>
+            <p>Hits the <strong>/cities/{id}</strong> endpoint for PUT.</p>
+        </div>
+        <div class="button-row">
+            <button class="cities-read" onclick="navigateTo('/cities/{id}')">Read City</button>
+            <button class="cities-update" onclick="navigateTo('/cities/{id}')">Update City</button>
+        </div>
+
+        <p>Hits the <strong>/cities/{id}</strong> endpoint for DELETE.</p>
+        <button class="cities-delete" onclick="navigateTo('/cities/{id}')">Delete City</button>
+    </div>
 </div>
 
 <script>
