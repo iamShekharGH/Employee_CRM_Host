@@ -13,4 +13,16 @@ fun Application.module() {
     configureDatabases()
     configureSecurity()
     configureRouting()
+
+
+
+
+
+
+    environment.log.info(
+        "Application running on ${
+            environment.config.propertyOrNull("ktor.deployment.host")?.getString()
+        }:${environment.config.propertyOrNull("ktor.deployment.port")?.getString()}"
+    )
+
 }

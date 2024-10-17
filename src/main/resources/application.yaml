@@ -8,3 +8,7 @@ jwt:
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"
   realm: "ktor sample app"
+postgres:
+  url: "jdbc:postgresql://localhost:5432/user_information"
+  user: "postgres"
+  password: "password"
